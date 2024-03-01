@@ -6,6 +6,25 @@ import {
   findUserByUsername,
 } from "../repositories/user.repository.js";
 
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await findUserById(id);
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User doesn't exists!",
+      });
+    }
+
+    res.json({ success: true, data: user });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export const login = async (req, res) => {
   const { username, password } = req.body;
 

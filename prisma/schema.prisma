@@ -8,44 +8,49 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  username  String    @unique @db.VarChar(32)
+  id        String   @id @default(cuid())
+  username  String   @unique @db.VarChar(32)
   password  String
   picture   String?
-  store     Store?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Comment   Comment[]
-  Reply     Reply?
+  // store     Store?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments Comment[]
+  reply    Reply?
+  products Product[]
 }
 
-model Store {
-  id          String    @id @default(cuid())
-  name        String
-  description String?   @db.LongText
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  products    Product[]
+// model Store {
+//   id          String    @id @default(cuid())
+//   name        String
+//   description String?   @db.LongText
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt
+//   products    Product[]
 
-  userId String @unique
-  owner  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+//   userId String @unique
+//   owner  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
 
 model Product {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  description String?   @db.LongText
+  description String?  @db.LongText
   price       Int
-  sold        Int       @default(0)
-  quantity    Int       @default(1)
-  images      Json
+  sold        Int?     @default(0)
+  stock       Int
+  image       String
   category    Category
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  comments    Comment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  storeId String @unique
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  userId   String
+  owner    User      @relation(fields: [userId], references: [id])
+  comments Comment[]
+
+  // storeId String @unique
+  // store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -57,7 +62,7 @@ model Comment {
   ref       Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   userId    String  @unique
   owner     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Reply     Reply?
+  reply     Reply?
 }
 
 model Reply {

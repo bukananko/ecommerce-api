@@ -3,6 +3,7 @@ import * as controller from "../controllers/user.controller.js";
 
 const router = express.Router();
 
+router.get("/:id", controller.getUserById);
 router.post("/register", controller.register);
 router.post("/login", controller.login);
 router.patch("/edit/profile", controller.updateUser);
