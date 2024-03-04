@@ -46,7 +46,7 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   userId   String
-  owner    User      @relation(fields: [userId], references: [id])
+  owner    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments Comment[]
 
   // storeId String @unique

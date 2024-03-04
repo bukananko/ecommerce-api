@@ -60,3 +60,37 @@ export const findAllProducts = ({ skip }) => {
     },
   });
 };
+
+export const findProductById = (id) => {
+  return prisma.product.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      owner: {
+        select: {
+          password: false,
+          username: true,
+        },
+      },
+    },
+  });
+};
+
+export const patchProductById = (
+  id,
+  { name, description, price, stock, category }
+) => {
+  return prisma.product.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      description,
+      price,
+      stock,
+      category,
+    },
+  });
+};

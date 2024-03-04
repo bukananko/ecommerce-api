@@ -2,16 +2,18 @@ import {
   createNewProduct,
   findAllProducts,
   findOwnedProductsByUserId,
+  findProductById,
+  patchProductById,
 } from "../repositories/product.repository.js";
 
 export const createProduct = async (req, res) => {
   const { name, description, price, stock, category, image, userId } = req.body;
 
   try {
-    if (price || stock > 99999999) {
+    if (price > 99999999 || stock > 99999999) {
       return res.status(400).json({
         success: false,
-        message: "Price must be less than 99999999",
+        message: "Price/stock must be less than 99999999",
       });
     }
 
@@ -59,6 +61,37 @@ export const getAllProducts = async (req, res) => {
     });
 
     res.json({ success: true, data: products });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const getProductById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await findProductById(id);
+
+    res.json({ success: true, data: product });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const editProductById = async (req, res) => {
+  const { id } = req.params;
+  const { name, description, price, stock, category } = req.body;
+
+  try {
+    await patchProductById(id, {
+      name,
+      description,
+      price,
+      stock,
+      category,
+    });
+
+    res.json({ success: true, message: "Product updated successfully" });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
