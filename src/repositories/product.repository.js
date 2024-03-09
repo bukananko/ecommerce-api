@@ -71,16 +71,22 @@ export const findProductById = (id) => {
         select: {
           password: false,
           username: true,
+          picture: true,
+          id: true,
         },
       },
     },
   });
 };
 
-export const patchProductById = (
+export const patchProductById = ({
   id,
-  { name, description, price, stock, category }
-) => {
+  name,
+  description,
+  price,
+  stock,
+  category,
+}) => {
   return prisma.product.update({
     where: {
       id,

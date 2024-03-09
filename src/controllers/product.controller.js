@@ -83,7 +83,8 @@ export const editProductById = async (req, res) => {
   const { name, description, price, stock, category } = req.body;
 
   try {
-    await patchProductById(id, {
+    await patchProductById({
+      id,
       name,
       description,
       price,
