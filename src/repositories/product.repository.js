@@ -100,3 +100,39 @@ export const patchProductById = ({
     },
   });
 };
+
+export const findProductsByQuery = ({ query, skip }) => {
+  return prisma.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    skip,
+    take: 10,
+    where: {
+      OR: [
+        {
+          name: {
+            contains: query,
+          },
+        },
+        {
+          description: {
+            contains: query,
+          },
+        },
+        {
+          owner: {
+            username: {
+              contains: query,
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      owner: {
+        select: { username: true },
+      },
+    },
+  });
+};

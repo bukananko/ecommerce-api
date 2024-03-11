@@ -3,6 +3,7 @@ import {
   findAllProducts,
   findOwnedProductsByUserId,
   findProductById,
+  findProductsByQuery,
   patchProductById,
 } from "../repositories/product.repository.js";
 
@@ -93,6 +94,21 @@ export const editProductById = async (req, res) => {
     });
 
     res.json({ success: true, message: "Product updated successfully" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const getProductsByQuery = async (req, res) => {
+  const { query, skip } = req.query;
+
+  try {
+    const products = await findProductsByQuery({
+      query,
+      skip: Number(skip),
+    });
+
+    res.json({ success: true, data: products });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
