@@ -7,6 +7,14 @@ export const findUserByUsername = async (username) => {
 export const findUserById = async (id) => {
   return await prisma.user.findUnique({
     where: { id },
+    include: {
+      cart: {
+        select: {
+          userId: true,
+          productId: true,
+        },
+      },
+    },
   });
 };
 

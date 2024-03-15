@@ -19,6 +19,7 @@ model User {
   comments Comment[]
   reply    Reply[]
   products Product[]
+  cart     Cart[]
 }
 
 // model Store {
@@ -48,6 +49,7 @@ model Product {
   userId   String
   owner    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments Comment[]
+  cartItem Cart[]
 
   // storeId String @unique
   // store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -76,6 +78,16 @@ model Reply {
   owner     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   commentId String  @unique
   ref       Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id      String @id @default(cuid())
+  qtyItem Int    @default(1)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String
+  owner     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Category {
